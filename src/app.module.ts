@@ -1,12 +1,20 @@
+import { join } from 'path';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dbConfig } from './config/db';
+import { RestaurantModule } from './restaurant/restaurant.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(dbConfig)],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    TypeOrmModule.forRoot(dbConfig),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'schema.gql'),
+      playground: true,
+    }),
+    RestaurantModule,
+  ],
 })
 export class AppModule {}

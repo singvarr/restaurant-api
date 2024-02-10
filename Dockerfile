@@ -1,7 +1,8 @@
 FROM node:20-slim
 WORKDIR /app
+RUN apt-get update && apt-get install -y procps
 COPY ./package*.json ./
 RUN npm ci
 ADD ./ ./
-CMD npm run start:dev
-EXPOSE $PORT
+EXPOSE 3000
+CMD npm run start:debug

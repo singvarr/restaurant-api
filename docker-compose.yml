@@ -18,7 +18,7 @@ services:
       context: ./
     container_name: restaurant-reviews-api
     ports:
-      - '$PORT:$PORT'
+      - 3000:3000
     depends_on:
       - restaurant-reviews-db
     restart: always
