@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { CuisineType } from './cuisine-type.enum';
+import { CuisineType } from '../cuisine-type.enum';
 
 @ObjectType()
 export class RestaurantType {
