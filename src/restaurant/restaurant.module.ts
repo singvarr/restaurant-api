@@ -1,12 +1,17 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Module } from '@nestjs/common';
-import { RestaurantResolver } from './api/restaurant.resolver';
+import { Module, forwardRef } from '@nestjs/common';
+import { RestaurantResolver } from './api/restaurant.query';
 import { Restaurant } from './restaurant.entity';
 import { RestaurantService } from './restaurant.service';
-import { RestaurantMutations } from './api/restraurant.mutation';
+import { RestaurantMutations } from './api/restaurant.mutation';
+import { UserModule } from 'user/user.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Restaurant])],
+  imports: [
+    TypeOrmModule.forFeature([Restaurant]),
+    forwardRef(() => UserModule),
+  ],
   providers: [RestaurantResolver, RestaurantMutations, RestaurantService],
+  exports: [RestaurantService],
 })
 export class RestaurantModule {}

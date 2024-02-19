@@ -3,8 +3,9 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { dbConfig } from './config/db';
-import { RestaurantModule } from './restaurant/restaurant.module';
+import { dbConfig } from 'config/db';
+import { RestaurantModule } from 'restaurant/restaurant.module';
+import { UserModule } from 'user/user.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { RestaurantModule } from './restaurant/restaurant.module';
       playground: true,
     }),
     RestaurantModule,
+    UserModule,
   ],
 })
 export class AppModule {}
