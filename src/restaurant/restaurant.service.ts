@@ -3,7 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Restaurant } from './restaurant.entity';
 import { CuisineType } from './cuisine-type.enum';
-import { User } from 'user/user.entity';
 
 interface CreateRestaurantInput {
   name: string;
@@ -30,7 +29,11 @@ export class RestaurantService {
     return this.restaurantRepository.save(restaurant);
   }
 
-  async findUserRestaurants(user: User) {
-    return this.restaurantRepository.find({ where: { owner: user } });
+  async findRestaurantById(id: number) {
+    return this.restaurantRepository.findOne({ where: { id } });
+  }
+
+  async findUserRestaurants(userId: number) {
+    return this.restaurantRepository.find({ where: { owner: { id: userId } } });
   }
 }
