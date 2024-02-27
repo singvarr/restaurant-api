@@ -1,5 +1,4 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { RestaurantType } from 'restaurant/api/restaurant.type';
 
 @ObjectType()
 export class UserType {
@@ -14,7 +13,4 @@ export class UserType {
 
   @Field(() => String)
   email: string;
-
-  @Field(() => [RestaurantType])
-  restaurants: RestaurantType[];
 }

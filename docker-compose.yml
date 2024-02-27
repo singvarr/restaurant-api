@@ -1,10 +1,10 @@
 version: '3.7'
 
 services:
-  restaurant-reviews-db:
+  restaurant-db:
     image: postgres:latest
     ports:
-      - '5434:$DB_PORT'
+      - 5434:5432
     environment:
       POSTGRES_DB: $DB_NAME
       POSTGRES_USER: $DB_USER
@@ -12,21 +12,8 @@ services:
     container_name: restaurant-reviews-db
     volumes:
       - ./pg_data:/var/lib/postgresql/data
-
-  restaurant-reviews-api:
-    build:
-      context: ./
-    container_name: restaurant-reviews-api
-    ports:
-      - 3000:3000
-    depends_on:
-      - restaurant-reviews-db
-    restart: always
-    volumes:
-      - .:/app/
     env_file:
       - .env
 
 volumes:
-  restaurant-reviews-api-volume:
   restaurant-reviews-db-volume:
