@@ -1,7 +1,4 @@
-import { config } from 'dotenv';
-
-config();
-
+import 'dotenv/config';
 import { join } from 'path';
 import { DataSource } from 'typeorm';
 import migrations from './migrations';
