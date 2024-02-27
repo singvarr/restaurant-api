@@ -15,4 +15,4 @@ import { OrderService } from './order.service';
   providers: [OrderMutations, OrderService],
   exports: [OrderService],
 })
-export class OrdersModule {}
+export class OrderModule {}

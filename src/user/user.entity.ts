@@ -1,7 +1,7 @@
 import { IsEmail } from 'class-validator';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Restaurant } from 'restaurant/restaurant.entity';
-import { Order } from 'orders/order.entity';
+import { Order } from 'order/order.entity';
 
 @Entity()
 export class User {

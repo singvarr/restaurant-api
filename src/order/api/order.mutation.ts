@@ -1,11 +1,11 @@
 import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
-import { OrderType } from 'orders/api/order.type';
+import { OrderType } from 'order/api/order.type';
 import { CreateOrderInput } from './create-order.input';
-import { OrderService } from 'orders/order.service';
+import { OrderService } from 'order/order.service';
 import { UserService } from 'user/user.service';
 import { RestaurantService } from 'restaurant/restaurant.service';
 import { NotFoundException } from '@nestjs/common';
-import { OrderStatus } from 'orders/order-status.enum';
+import { OrderStatus } from 'order/order-status.enum';
 
 @Resolver(() => OrderType)
 export class OrderMutations {

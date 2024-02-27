@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { OrderStatus } from 'orders/order-status.enum';
+import { OrderStatus } from 'order/order-status.enum';
 
 @ObjectType()
 export class OrderType {

@@ -5,13 +5,13 @@ import { User } from './user.entity';
 import { UserMutations } from './api/user.mutation';
 import { UserQuery } from './api/user.query';
 import { RestaurantModule } from 'restaurant/restaurant.module';
-import { OrdersModule } from 'orders/order.module';
+import { OrderModule } from 'order/order.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     forwardRef(() => RestaurantModule),
-    forwardRef(() => OrdersModule),
+    forwardRef(() => OrderModule),
   ],
   providers: [UserService, UserMutations, UserQuery],
   exports: [UserService],

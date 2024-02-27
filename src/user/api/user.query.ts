@@ -3,8 +3,8 @@ import { UserType } from './user.type';
 import { UserService } from '../user.service';
 import { RestaurantService } from 'restaurant/restaurant.service';
 import { RestaurantType } from 'restaurant/api/restaurant.type';
-import { OrderType } from 'orders/api/order.type';
-import { OrderService } from 'orders/order.service';
+import { OrderType } from 'order/api/order.type';
+import { OrderService } from 'order/order.service';
 
 @Resolver(() => UserType)
 export class UserQuery {

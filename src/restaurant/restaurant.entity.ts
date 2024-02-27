@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { User } from 'user/user.entity';
 import { CuisineType } from './cuisine-type.enum';
-import { Order } from 'orders/order.entity';
+import { Order } from 'order/order.entity';
 
 @Entity()
 export class Restaurant {
