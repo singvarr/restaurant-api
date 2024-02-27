@@ -9,6 +9,7 @@ export class OrderType {
   @Field(() => OrderStatus)
   status: OrderStatus;
 
-  @Field(() => Date)
-  orderDate: Date;
+  // TODO: write custom scalar for date only field
+  @Field(() => String)
+  orderDate: string;
 }

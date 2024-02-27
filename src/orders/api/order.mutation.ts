@@ -1,10 +1,11 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
 import { OrderType } from 'orders/api/order.type';
 import { CreateOrderInput } from './create-order.input';
 import { OrderService } from 'orders/order.service';
 import { UserService } from 'user/user.service';
 import { RestaurantService } from 'restaurant/restaurant.service';
 import { NotFoundException } from '@nestjs/common';
+import { OrderStatus } from 'orders/order-status.enum';
 
 @Resolver(() => OrderType)
 export class OrderMutations {
@@ -34,12 +35,17 @@ export class OrderMutations {
     return this.orderService.createOrder(restaurant, user, orderDate);
   }
 
-  // async approveOrder(@Args('orderId', { type: () => ID }) orderId: number) {
-  //   const restaurant =
-  //     await this.restaurantService.findRestaurantById(restaurantId);
+  @Mutation(() => OrderType)
+  async reviewOrder(
+    @Args('orderId', { type: () => ID }) orderId: number,
+    @Args('status', { type: () => OrderStatus }) status: OrderStatus,
+  ) {
+    const order = await this.orderService.findById(orderId);
 
-  //   if (!restaurant) {
-  //     throw new NotFoundException(`Restaurant ${restaurantId} isn't found`);
-  //   }
-  // }
+    if (!order) {
+      throw new NotFoundException(`Order ${orderId} isn't found`);
+    }
+
+    return this.orderService.reviewOrder(order, status);
+  }
 }

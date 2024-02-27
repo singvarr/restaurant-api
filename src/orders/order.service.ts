@@ -13,7 +13,7 @@ export class OrderService {
     private orderRepository: Repository<Order>,
   ) {}
 
-  async createOrder(restaurant: Restaurant, user: User, orderDate: Date) {
+  createOrder(restaurant: Restaurant, user: User, orderDate: Date) {
     const order = this.orderRepository.create({
       user,
       restaurant,
@@ -24,13 +24,27 @@ export class OrderService {
     return this.orderRepository.save(order);
   }
 
-  async findRestaurantOrders(restaurantId: number) {
+  findRestaurantOrders(restaurantId: number) {
     return this.orderRepository.find({
       where: { restaurant: { id: restaurantId } },
     });
   }
 
-  async findUserOrders(user: User) {
-    return this.orderRepository.find({ where: { user } });
+  findUserOrders(userId: number) {
+    return this.orderRepository.find({ where: { user: { id: userId } } });
+  }
+
+  findById(id: number) {
+    return this.orderRepository.findOne({ where: { id } });
+  }
+
+  reviewOrder(order: Order, status: OrderStatus) {
+    if (status === OrderStatus.NEW) {
+      throw new Error('Cannot set new status for order');
+    }
+
+    order.status = status;
+
+    return this.orderRepository.save(order);
   }
 }
