@@ -37,3 +37,4 @@ lerna-debug.log*
 .env
 pg_data
 schema.gql
+.vscode
