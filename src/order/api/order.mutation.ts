@@ -1,11 +1,14 @@
 import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
+import { Inject, NotFoundException } from '@nestjs/common';
+import { PubSub } from 'graphql-subscriptions';
 import { OrderType } from 'order/api/order.type';
 import { CreateOrderInput } from './create-order.input';
 import { OrderService } from 'order/order.service';
 import { UserService } from 'user/user.service';
 import { RestaurantService } from 'restaurant/restaurant.service';
-import { NotFoundException } from '@nestjs/common';
 import { OrderStatus } from 'order/order-status.enum';
+import { OrderEvents } from './order-event.enum';
+import { PUB_SUB } from 'constants/injectTokens';
 
 @Resolver(() => OrderType)
 export class OrderMutations {
@@ -13,6 +16,7 @@ export class OrderMutations {
     private orderService: OrderService,
     private userService: UserService,
     private restaurantService: RestaurantService,
+    @Inject(PUB_SUB) private pubSub: PubSub,
   ) {}
 
   @Mutation(() => OrderType)
@@ -32,7 +36,15 @@ export class OrderMutations {
       throw new NotFoundException(`User ${userId} isn't found`);
     }
 
-    return this.orderService.createOrder(restaurant, user, orderDate);
+    const newOrder = await this.orderService.createOrder(
+      restaurant,
+      user,
+      orderDate,
+    );
+
+    this.pubSub.publish(OrderEvents.ORDER_CREATED, { addedOrder: newOrder });
+
+    return newOrder;
   }
 
   @Mutation(() => OrderType)
