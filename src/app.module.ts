@@ -7,14 +7,22 @@ import { dbConfig } from 'config/db';
 import { RestaurantModule } from 'restaurant/restaurant.module';
 import { UserModule } from 'user/user.module';
 import { OrderModule } from 'order/order.module';
+import { ConfigModule } from './config/config.module';
 
 @Module({
   imports: [
+    ConfigModule,
     TypeOrmModule.forRoot(dbConfig),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'schema.gql'),
       playground: true,
+      installSubscriptionHandlers: true,
+      subscriptions: {
+        'graphql-ws': true,
+        // Important: graphql-ws isn't supported by default GraphQL playground
+        'subscriptions-transport-ws': process.env.NODE_ENV === 'development',
+      },
     }),
     RestaurantModule,
     UserModule,
