@@ -5,6 +5,7 @@ import { OrderMutations } from './api/order.mutation';
 import { UserModule } from 'user/user.module';
 import { RestaurantModule } from 'restaurant/restaurant.module';
 import { OrderService } from './order.service';
+import { OrderSubscriptions } from './api/order.subscription';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { OrderService } from './order.service';
     forwardRef(() => UserModule),
     forwardRef(() => RestaurantModule),
   ],
-  providers: [OrderMutations, OrderService],
+  providers: [OrderMutations, OrderService, OrderSubscriptions],
   exports: [OrderService],
 })
 export class OrderModule {}

@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { OrderStatus } from 'order/order-status.enum';
+import { RestaurantType } from 'restaurant/api/restaurant.type';
 
 @ObjectType()
 export class OrderType {
@@ -12,4 +13,7 @@ export class OrderType {
   // TODO: write custom scalar for date only field
   @Field(() => String)
   orderDate: string;
+
+  @Field(() => RestaurantType)
+  restaurant: RestaurantType;
 }
