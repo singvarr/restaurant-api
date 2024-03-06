@@ -1,4 +1,4 @@
-import { IsEmail } from 'class-validator';
+import { IsEmail, IsStrongPassword } from 'class-validator';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Restaurant } from 'restaurant/restaurant.entity';
 import { Order } from 'order/order.entity';
@@ -14,9 +14,13 @@ export class User {
   @Column()
   lastName: string;
 
-  @Column()
+  @Column({ unique: true })
   @IsEmail()
+  @IsStrongPassword()
   email: string;
+
+  @Column()
+  password: string;
 
   @OneToMany(() => Restaurant, (restaurant) => restaurant.owner)
   restaurants: Restaurant[];

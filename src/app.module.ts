@@ -5,9 +5,10 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dbConfig } from 'config/db';
 import { RestaurantModule } from 'restaurant/restaurant.module';
+import { AuthModule } from 'auth/auth.module';
 import { UserModule } from 'user/user.module';
 import { OrderModule } from 'order/order.module';
-import { ConfigModule } from './config/config.module';
+import { ConfigModule } from 'config/config.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ConfigModule } from './config/config.module';
     RestaurantModule,
     UserModule,
     OrderModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
