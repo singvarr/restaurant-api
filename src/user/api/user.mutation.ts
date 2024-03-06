@@ -1,7 +1,6 @@
 import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
 import { DeleteResult } from 'common/delete-result';
 import { UserType } from './user.type';
-import { CreateUserInput } from './create-user.input';
 import { UserService } from '../user.service';
 import { NotFoundException } from '@nestjs/common';
 import { UpdateUserInput } from './update-user.input';
@@ -9,11 +8,6 @@ import { UpdateUserInput } from './update-user.input';
 @Resolver(() => UserType)
 export class UserMutations {
   constructor(private userService: UserService) {}
-
-  @Mutation(() => UserType)
-  async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
-    return this.userService.createUser(createUserInput);
-  }
 
   @Mutation(() => DeleteResult)
   async deleteUser(@Args('userId', { type: () => ID }) userId: number) {
