@@ -2,8 +2,8 @@ import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
-import { CreateUserInput } from './api/create-user.input';
 import { UpdateUserInput } from './api/update-user.input';
+import { RegisterUserInput } from 'auth/api/register-user.input';
 
 @Injectable()
 export class UserService {
@@ -12,7 +12,7 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  createUser(body: CreateUserInput): Promise<User> {
+  createUser(body: RegisterUserInput): Promise<User> {
     const user = this.userRepository.create(body);
 
     return this.userRepository.save(user);
@@ -24,6 +24,10 @@ export class UserService {
 
   findUserById(id: number) {
     return this.userRepository.findOne({ where: { id } });
+  }
+
+  findUserByEmail(email: string) {
+    return this.userRepository.findOne({ where: { email } });
   }
 
   async deleteUserById(userId: number) {
