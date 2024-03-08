@@ -6,6 +6,7 @@ import { RestaurantService } from './restaurant.service';
 import { RestaurantMutations } from './api/restaurant.mutation';
 import { UserModule } from 'user/user.module';
 import { OrderModule } from 'order/order.module';
+import { RestaurantOwnerGuard } from './restaurant-owner.guard';
 
 @Module({
   imports: [
@@ -13,7 +14,12 @@ import { OrderModule } from 'order/order.module';
     forwardRef(() => UserModule),
     forwardRef(() => OrderModule),
   ],
-  providers: [RestaurantResolver, RestaurantMutations, RestaurantService],
+  providers: [
+    RestaurantResolver,
+    RestaurantMutations,
+    RestaurantOwnerGuard,
+    RestaurantService,
+  ],
   exports: [RestaurantService],
 })
 export class RestaurantModule {}
