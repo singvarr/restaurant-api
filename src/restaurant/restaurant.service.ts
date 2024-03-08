@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Restaurant } from './restaurant.entity';
 import { CuisineType } from './cuisine-type.enum';
+import { TokenPayload } from 'auth/constants/token-payload.interface';
 
 interface CreateRestaurantInput {
   name: string;
@@ -35,5 +36,12 @@ export class RestaurantService {
 
   async findUserRestaurants(userId: number) {
     return this.restaurantRepository.find({ where: { owner: { id: userId } } });
+  }
+
+  isOwner(restaurant: Restaurant, tokenPayload: TokenPayload) {
+    return this.restaurantRepository.existsBy({
+      id: restaurant.id,
+      owner: { id: tokenPayload.id },
+    });
   }
 }
