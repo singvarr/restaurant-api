@@ -9,11 +9,11 @@ services:
       POSTGRES_DB: $DB_NAME
       POSTGRES_USER: $DB_USER
       POSTGRES_PASSWORD: $DB_PASSWORD
-    container_name: restaurant-reviews-db
+    container_name: restaurant-db
     volumes:
-      - ./pg_data:/var/lib/postgresql/data
+      - ./restaurant-db:/var/lib/postgresql/data
     env_file:
       - .env
 
 volumes:
-  restaurant-reviews-db-volume:
+  restaurant-db:

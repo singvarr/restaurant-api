@@ -8,7 +8,7 @@ import { UserService } from 'user/user.service';
 import { RestaurantService } from 'restaurant/restaurant.service';
 import { OrderStatus } from 'order/order-status.enum';
 import { OrderEvents } from './order-event.enum';
-import { PUB_SUB } from 'constants/injectTokens';
+import { PUB_SUB } from 'constants/pubsub-inject-token';
 
 @Resolver(() => OrderType)
 export class OrderMutations {

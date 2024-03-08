@@ -19,6 +19,7 @@ import { ConfigModule } from 'config/config.module';
       autoSchemaFile: join(process.cwd(), 'schema.gql'),
       playground: true,
       installSubscriptionHandlers: true,
+      fieldResolverEnhancers: ['guards'],
       subscriptions: {
         'graphql-ws': true,
         // Important: graphql-ws isn't supported by default GraphQL playground

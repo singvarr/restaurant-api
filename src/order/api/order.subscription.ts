@@ -2,7 +2,7 @@ import { Args, ID, Resolver, Subscription } from '@nestjs/graphql';
 import { OrderType } from 'order/api/order.type';
 import { Inject, NotFoundException } from '@nestjs/common';
 import { PubSub } from 'graphql-subscriptions';
-import { PUB_SUB } from 'constants/injectTokens';
+import { PUB_SUB } from 'constants/pubsub-inject-token';
 import { OrderEvents } from './order-event.enum';
 import { RestaurantService } from 'restaurant/restaurant.service';
 
