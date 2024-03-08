@@ -2,6 +2,7 @@ import { IsEmail, IsStrongPassword } from 'class-validator';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Restaurant } from 'restaurant/restaurant.entity';
 import { Order } from 'order/order.entity';
+import { Roles } from 'auth/constants/roles.enum';
 
 @Entity()
 export class User {
@@ -21,6 +22,9 @@ export class User {
 
   @Column()
   password: string;
+
+  @Column({ type: 'enum', enum: Roles, nullable: true, default: null })
+  role: Roles;
 
   @OneToMany(() => Restaurant, (restaurant) => restaurant.owner)
   restaurants: Restaurant[];
