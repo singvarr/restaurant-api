@@ -5,6 +5,7 @@ import { compare, hash } from 'bcrypt';
 import { RegisterUserInput } from './api/register-user.input';
 import { UserService } from 'user/user.service';
 import { LoginUserInput } from './api/login.input';
+import { TokenPayload } from './constants/token-payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -44,12 +45,29 @@ export class AuthService {
       throw new AuthenticationError('Invalid credentials');
     }
 
-    const payload = { userId: user.id, email: user.email };
+    const payload: TokenPayload = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    };
+
     const token = this.jwtService.sign(payload, {
       secret: process.env.ACCESS_TOKEN_SECRET,
       expiresIn: AuthService.ACCESS_TOKEN_TTL,
     });
 
     return { accessToken: token };
+  }
+
+  async verifyToken(token: string): Promise<boolean> {
+    try {
+      const result = await this.jwtService.verifyAsync(token, {
+        secret: process.env.ACCESS_TOKEN_SECRET,
+      });
+
+      return result;
+    } catch (_) {
+      return false;
+    }
   }
 }
