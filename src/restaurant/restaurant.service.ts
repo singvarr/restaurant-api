@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Restaurant } from './restaurant.entity';
 import { CuisineType } from './cuisine-type.enum';
-import { TokenPayload } from 'auth/constants/token-payload.interface';
+import { TokenPayload } from 'token/token-payload.interface';
 
 interface CreateRestaurantInput {
   name: string;

@@ -8,7 +8,7 @@ import { UserType } from 'user/api/user.type';
 import { UserService } from 'user/user.service';
 import { OrderType } from 'order/api/order.type';
 import { OrderService } from 'order/order.service';
-import { Roles } from 'auth/constants/roles.enum';
+import { Roles } from 'auth/roles.enum';
 import { RolesGuard } from 'auth/guards/roles.guard';
 import { Role } from 'constants/roles.decorator';
 

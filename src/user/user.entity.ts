@@ -2,7 +2,7 @@ import { IsEmail, IsStrongPassword } from 'class-validator';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Restaurant } from 'restaurant/restaurant.entity';
 import { Order } from 'order/order.entity';
-import { Roles } from 'auth/constants/roles.enum';
+import { Roles } from 'auth/roles.enum';
 
 @Entity()
 export class User {
