@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { ForbiddenError, AuthenticationError } from '@nestjs/apollo';
 import { compare, hash } from 'bcrypt';
 import { RegisterUserInput } from './api/register-user.input';
 import { UserService } from 'user/user.service';
 import { LoginUserInput } from './api/login.input';
-import { TokenPayload } from './constants/token-payload.interface';
+import { AccessTokenService } from 'token/access-token.service';
+import { RefreshTokenService } from 'token/refresh-token.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private jwtService: JwtService,
     private userService: UserService,
+    private accessTokenService: AccessTokenService,
+    private refreshTokenService: RefreshTokenService,
   ) {}
 
   private static readonly SALT_ROUNDS = 10;
-  private static readonly ACCESS_TOKEN_TTL = '15m';
 
   async registerUser(input: RegisterUserInput) {
     const user = await this.userService.findUserByEmail(input.email);
@@ -45,29 +45,43 @@ export class AuthService {
       throw new AuthenticationError('Invalid credentials');
     }
 
-    const payload: TokenPayload = {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-    };
+    const accessToken = await this.accessTokenService.generate(user);
+    const refreshToken = await this.refreshTokenService.generate(user);
 
-    const token = this.jwtService.sign(payload, {
-      secret: process.env.ACCESS_TOKEN_SECRET,
-      expiresIn: AuthService.ACCESS_TOKEN_TTL,
-    });
-
-    return { accessToken: token };
+    return { accessToken, refreshToken };
   }
 
-  async verifyToken(token: string): Promise<boolean> {
-    try {
-      const result = await this.jwtService.verifyAsync(token, {
-        secret: process.env.ACCESS_TOKEN_SECRET,
-      });
+  async logoutUser(token: string) {
+    const isValidToken = await this.accessTokenService.verify(token);
 
-      return result;
-    } catch (_) {
-      return false;
+    if (!isValidToken) {
+      throw new AuthenticationError('Failed to log out');
+    }
+
+    const isBlacklisted = await this.accessTokenService.isBlackListed(token);
+
+    if (isBlacklisted) {
+      throw new AuthenticationError('Failed to log out');
+    }
+
+    await this.accessTokenService.blacklist(token);
+  }
+
+  async refreshToken(token: string) {
+    try {
+      await this.refreshTokenService.verify(token);
+      await this.refreshTokenService.blacklist(token);
+
+      const user = await this.refreshTokenService.getUserFromToken(token);
+
+      const [accessToken, refreshToken] = await Promise.all([
+        this.accessTokenService.generate(user),
+        this.refreshTokenService.generate(user),
+      ]);
+
+      return { accessToken, refreshToken };
+    } catch (error) {
+      throw new AuthenticationError('Failed to refresh token');
     }
   }
 }
