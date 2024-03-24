@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { Roles } from 'auth/constants/roles.enum';
-import { TokenPayload } from 'auth/constants/token-payload.interface';
+import { Roles } from 'auth/roles.enum';
+import { TokenPayload } from 'token/token-payload.interface';
 import { ROLE_KEY as ROLE_KEY } from 'constants/roles.decorator';
 
 @Injectable()

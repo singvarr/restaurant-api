@@ -1,18 +1,18 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { AuthService } from 'auth/auth.service';
-import { IS_PUBLIC_KEY } from 'constants/is-public.decorator';
 import { Request } from 'express';
+import { IS_PUBLIC_KEY } from 'constants/is-public.decorator';
+import { AccessTokenService } from 'token/access-token.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private authService: AuthService,
+    private accessTokenService: AccessTokenService,
     private reflector: Reflector,
   ) {}
 
-  private getTokenFromHeader(request: Request) {
+  getTokenFromHeader(request: Request) {
     return request.headers.authorization;
   }
 
@@ -35,14 +35,13 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-    const userPayload = await this.authService.verifyToken(token);
+    try {
+      const userPayload = await this.accessTokenService.verify(token);
+      request.user = userPayload;
 
-    if (!userPayload) {
+      return true;
+    } catch (_) {
       return false;
     }
-
-    request.user = userPayload;
-
-    return true;
   }
 }

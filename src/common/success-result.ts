@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class LoginSuccessType {
+export class SuccessResult {
   @Field()
-  accessToken: string;
+  success: 'ok';
 }
