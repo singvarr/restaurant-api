@@ -11,6 +11,7 @@ import { UserModule } from 'user/user.module';
 import { OrderModule } from 'order/order.module';
 import { TokenModule } from 'token/token.module';
 import { ConfigModule } from 'config/config.module';
+import { PaginationModule } from './pagination/pagination.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ConfigModule } from 'config/config.module';
     OrderModule,
     AuthModule,
     TokenModule,
+    PaginationModule,
   ],
 })
 export class AppModule {}
