@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { PaginatedResponse } from 'pagination/api/paginated-entity.type';
 
 @ObjectType()
 export class UserType {
@@ -14,3 +15,6 @@ export class UserType {
   @Field(() => String)
   email: string;
 }
+
+@ObjectType()
+export class PaginatedUsers extends PaginatedResponse(UserType) {}

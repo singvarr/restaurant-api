@@ -4,12 +4,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { UpdateUserInput } from './api/update-user.input';
 import { RegisterUserInput } from 'auth/api/register-user.input';
+import { PaginationService } from 'pagination/pagination.service';
+import { PaginationInput } from 'pagination/api/pagination.input';
+import { PaginatedUsers } from './api/user.type';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private paginationService: PaginationService<User>,
   ) {}
 
   createUser(body: RegisterUserInput): Promise<User> {
@@ -18,8 +22,11 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
-  findAllUsers() {
-    return this.userRepository.find();
+  async findAllUsers(input: PaginationInput): Promise<PaginatedUsers> {
+    const { cursor, direction, limit } = input;
+    const query = this.userRepository.createQueryBuilder().select();
+
+    return this.paginationService.paginate(query, cursor, direction, limit);
   }
 
   findUserById(id: number) {
