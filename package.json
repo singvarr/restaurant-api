@@ -20,10 +20,12 @@
       "test:e2e": "jest --config ./test/jest-e2e.json",
       "typeorm": "ts-node -r tsconfig-paths/register node_modules/typeorm/cli.js",
       "migration:generate": "npm run typeorm -- -d ./ormconfig.ts migration:generate ./migrations/$npm_config_name",
-      "migration:run": "npm run typeorm -- migration:run -d ./ormconfig.ts"
+      "migration:run": "npm run typeorm -- migration:run -d ./ormconfig.ts",
+      "seed": "ts-node -r tsconfig-paths/register ./seed"
    },
    "dependencies": {
       "@apollo/server": "^4.10.0",
+      "@faker-js/faker": "^8.4.1",
       "@nest-lab/or-guard": "^2.4.1",
       "@nestjs/apollo": "^12.0.11",
       "@nestjs/common": "^10.0.0",
