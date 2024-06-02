@@ -19,13 +19,16 @@ export class PaginationService<T extends { id: number }> {
     query: SelectQueryBuilder<T>,
     nodes: T[],
     direction: PaginationDirection,
+    idField: string,
   ): Promise<boolean> {
     const whereClause = query.expressionMap?.wheres.length
       ? 'andWhere'
       : 'where';
 
     const comparisonCondition =
-      direction === PaginationDirection.FORWARD ? 'id > :id' : 'id < :id';
+      direction === PaginationDirection.FORWARD
+        ? `${idField} > :${idField}`
+        : `${idField} < :${idField}`;
 
     const offsetId =
       direction === PaginationDirection.FORWARD
@@ -33,7 +36,7 @@ export class PaginationService<T extends { id: number }> {
         : nodes[nodes.length - 1]?.id ?? null;
 
     const count = await query[whereClause](comparisonCondition, {
-      id: offsetId,
+      [idField]: offsetId,
     }).getCount();
 
     return count > 0;
@@ -44,10 +47,11 @@ export class PaginationService<T extends { id: number }> {
     cursor: string | null = null,
     direction: PaginationDirection = PaginationDirection.FORWARD,
     limit: number = PaginationService.DEFAULT_PAGE_SIZE,
+    idField: string = 'id',
   ) {
     const totalQuery = query.clone();
 
-    const result = query.orderBy({ id: SortOrder.ASC });
+    const result = query.orderBy({ [idField]: SortOrder.ASC });
 
     if (cursor) {
       const offsetId = PaginationService.convertCursorToId(cursor);
@@ -56,7 +60,7 @@ export class PaginationService<T extends { id: number }> {
           ? MoreThan(offsetId)
           : LessThan(offsetId);
 
-      result.where({ id: where });
+      result.where({ [idField]: where });
     }
 
     const data = await result.take(limit).getMany();
@@ -67,8 +71,8 @@ export class PaginationService<T extends { id: number }> {
     }));
 
     const [hasPrevPage, hasNextPage] = await Promise.all([
-      this.hasItems(totalQuery, data, PaginationDirection.BACKWARD),
-      this.hasItems(totalQuery, data, PaginationDirection.FORWARD),
+      this.hasItems(totalQuery, data, PaginationDirection.BACKWARD, idField),
+      this.hasItems(totalQuery, data, PaginationDirection.FORWARD, idField),
     ]);
 
     return {
