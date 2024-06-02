@@ -12,8 +12,12 @@ export class AuthGuard implements CanActivate {
     private reflector: Reflector,
   ) {}
 
-  getTokenFromHeader(request: Request) {
+  getTokenFromHTTPHeader(request: Request) {
     return request.headers.authorization;
+  }
+
+  getTokenFromWSConnectionParams(request) {
+    return request.connectionParams.Authorization;
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -29,7 +33,9 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    const token = this.getTokenFromHeader(request);
+    const token = request.subscriptions
+      ? this.getTokenFromWSConnectionParams(request)
+      : this.getTokenFromHTTPHeader(request);
 
     if (!token) {
       return false;

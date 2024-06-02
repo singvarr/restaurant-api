@@ -30,7 +30,7 @@ export class AuthMutations {
 
   @Mutation(() => SuccessResult)
   async logoutUser(@Context('req') request: Request) {
-    const token = this.authGuard.getTokenFromHeader(request);
+    const token = this.authGuard.getTokenFromHTTPHeader(request);
 
     await this.authService.logoutUser(token);
 
