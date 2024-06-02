@@ -23,8 +23,7 @@ export class OrderMutations {
   async createOrder(@Args('createOrderInput') input: CreateOrderInput) {
     const { userId, restaurantId, orderDate } = input;
 
-    const restaurant =
-      await this.restaurantService.findRestaurantById(restaurantId);
+    const restaurant = await this.restaurantService.findById(restaurantId);
 
     if (!restaurant) {
       throw new NotFoundException(`Restaurant ${restaurantId} isn't found`);

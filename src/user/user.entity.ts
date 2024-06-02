@@ -3,6 +3,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Restaurant } from 'restaurant/restaurant.entity';
 import { Order } from 'order/order.entity';
 import { Roles } from 'auth/roles.enum';
+import { Review } from 'review/review.entity';
 
 @Entity()
 export class User {
@@ -31,4 +32,7 @@ export class User {
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
+
+  @OneToMany(() => Review, (review) => review.author)
+  reviews: Review[];
 }

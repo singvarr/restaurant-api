@@ -9,6 +9,7 @@ import {
 import { User } from 'user/user.entity';
 import { CuisineType } from './cuisine-type.enum';
 import { Order } from 'order/order.entity';
+import { Review } from 'review/review.entity';
 
 @Entity()
 export class Restaurant {
@@ -27,4 +28,7 @@ export class Restaurant {
 
   @OneToMany(() => Order, (order) => order.restaurant)
   orders: Order[];
+
+  @OneToMany(() => Review, (review) => review.restaurant)
+  reviews: Review[];
 }
