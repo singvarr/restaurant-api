@@ -30,7 +30,7 @@ export class RestaurantService {
     return this.restaurantRepository.save(restaurant);
   }
 
-  async findRestaurantById(id: number) {
+  async findById(id: number) {
     return this.restaurantRepository.findOne({ where: { id } });
   }
 

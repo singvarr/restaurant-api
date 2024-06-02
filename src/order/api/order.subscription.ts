@@ -23,8 +23,8 @@ export class OrderSubscriptions {
     restaurantId: number | null = null,
   ) {
     if (restaurantId) {
-      const restaurant =
-        await this.restaurantService.findRestaurantById(restaurantId);
+      const restaurant = await this.restaurantService.findById(restaurantId);
+
       if (!restaurant) {
         throw new NotFoundException(`Restaurant ${restaurantId} doesn't exist`);
       }
