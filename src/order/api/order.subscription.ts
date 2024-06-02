@@ -32,4 +32,11 @@ export class OrderSubscriptions {
 
     return this.pubSub.asyncIterator(OrderEvents.ORDER_CREATED);
   }
+
+  @Subscription(() => OrderType, {
+    filter: ({ user }, _, { req }) => user.id === req.user.id,
+  })
+  async reviewedOrder() {
+    return this.pubSub.asyncIterator(OrderEvents.ORDER_REVIEWED);
+  }
 }

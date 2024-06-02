@@ -1,4 +1,5 @@
-import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, ID, Mutation, Resolver } from '@nestjs/graphql';
+import { Request } from 'express';
 import { Inject, NotFoundException } from '@nestjs/common';
 import { PubSub } from 'graphql-subscriptions';
 import { OrderType } from 'order/api/order.type';
@@ -50,6 +51,7 @@ export class OrderMutations {
   async reviewOrder(
     @Args('orderId', { type: () => ID }) orderId: number,
     @Args('status', { type: () => OrderStatus }) status: OrderStatus,
+    @Context('req') request: Request,
   ) {
     const order = await this.orderService.findById(orderId);
 
@@ -57,6 +59,13 @@ export class OrderMutations {
       throw new NotFoundException(`Order ${orderId} isn't found`);
     }
 
-    return this.orderService.reviewOrder(order, status);
+    const reviewedOrder = await this.orderService.reviewOrder(order, status);
+
+    this.pubSub.publish(OrderEvents.ORDER_REVIEWED, {
+      reviewedOrder,
+      user: request.user,
+    });
+
+    return reviewedOrder;
   }
 }
