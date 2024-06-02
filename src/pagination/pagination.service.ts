@@ -60,7 +60,11 @@ export class PaginationService<T extends { id: number }> {
           ? MoreThan(offsetId)
           : LessThan(offsetId);
 
-      result.where({ [idField]: where });
+      const whereClause = query.expressionMap?.wheres.length
+        ? 'andWhere'
+        : 'where';
+
+      result[whereClause]({ [idField]: where });
     }
 
     const data = await result.take(limit).getMany();

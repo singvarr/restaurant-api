@@ -48,10 +48,17 @@ export class ReviewService {
     }
   }
 
-  async findAll(input: PaginationInput): Promise<PaginatedReviews> {
+  async findAllByRestaurant(
+    input: PaginationInput,
+    restaurant: Restaurant,
+  ): Promise<PaginatedReviews> {
     const { cursor, direction, limit } = input;
+
     const query = this.reviewRepository
       .createQueryBuilder('review')
+      .where('review.restaurantId = :restaurantId', {
+        restaurantId: restaurant.id,
+      })
       .leftJoinAndSelect('review.author', 'user')
       .leftJoinAndSelect('review.restaurant', 'restaurant');
 
