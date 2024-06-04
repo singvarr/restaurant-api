@@ -8,7 +8,7 @@ import { dbConfig } from 'config/db';
 import { RestaurantModule } from 'restaurant/restaurant.module';
 import { AuthModule } from 'auth/auth.module';
 import { UserModule } from 'user/user.module';
-import { OrderModule } from 'order/order.module';
+import { ReservationModule } from 'reservation/reservation.module';
 import { TokenModule } from 'token/token.module';
 import { ConfigModule } from 'config/config.module';
 import { ReviewModule } from 'review/review.module';
@@ -33,7 +33,7 @@ import { PaginationModule } from 'pagination/pagination.module';
     }),
     RestaurantModule,
     UserModule,
-    OrderModule,
+    ReservationModule,
     AuthModule,
     TokenModule,
     PaginationModule,
