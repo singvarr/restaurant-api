@@ -1,4 +1,0 @@
-export enum OrderEvents {
-  ORDER_CREATED = 'ORDER_CREATED',
-  ORDER_REVIEWED = 'ORDER_REVIEWED',
-}
