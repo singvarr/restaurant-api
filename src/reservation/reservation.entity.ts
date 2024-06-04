@@ -3,23 +3,23 @@ import { Restaurant } from 'restaurant/restaurant.entity';
 import { User } from 'user/user.entity';
 
 @Entity()
-export class Order {
+export class Reservation {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column('date')
-  orderDate: Date;
+  reservationDate: Date;
 
   @Column()
   status: string;
 
-  @ManyToOne(() => User, (user) => user.orders, {
+  @ManyToOne(() => User, (user) => user.reservations, {
     onDelete: 'CASCADE',
     nullable: false,
   })
   user: User;
 
-  @ManyToOne(() => Restaurant, (restaurant) => restaurant.orders, {
+  @ManyToOne(() => Restaurant, (restaurant) => restaurant.reservations, {
     onDelete: 'CASCADE',
     nullable: false,
   })

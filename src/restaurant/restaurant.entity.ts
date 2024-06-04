@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { User } from 'user/user.entity';
 import { CuisineType } from './cuisine-type.enum';
-import { Order } from 'order/order.entity';
+import { Reservation } from 'reservation/reservation.entity';
 import { Review } from 'review/review.entity';
 
 @Entity()
@@ -26,8 +26,8 @@ export class Restaurant {
   @JoinColumn()
   owner: User;
 
-  @OneToMany(() => Order, (order) => order.restaurant)
-  orders: Order[];
+  @OneToMany(() => Reservation, (reservation) => reservation.restaurant)
+  reservations: Reservation[];
 
   @OneToMany(() => Review, (review) => review.restaurant)
   reviews: Review[];

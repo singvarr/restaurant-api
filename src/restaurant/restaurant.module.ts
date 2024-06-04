@@ -5,14 +5,14 @@ import { Restaurant } from './restaurant.entity';
 import { RestaurantService } from './restaurant.service';
 import { RestaurantMutations } from './api/restaurant.mutation';
 import { UserModule } from 'user/user.module';
-import { OrderModule } from 'order/order.module';
+import { ReservationModule } from 'reservation/reservation.module';
 import { RestaurantOwnerGuard } from './restaurant-owner.guard';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Restaurant]),
     forwardRef(() => UserModule),
-    forwardRef(() => OrderModule),
+    forwardRef(() => ReservationModule),
   ],
   providers: [
     RestaurantResolver,

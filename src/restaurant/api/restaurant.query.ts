@@ -6,8 +6,8 @@ import { RestaurantService } from '../restaurant.service';
 import { RestaurantOwnerGuard } from '../restaurant-owner.guard';
 import { UserType } from 'user/api/user.type';
 import { UserService } from 'user/user.service';
-import { OrderType } from 'order/api/order.type';
-import { OrderService } from 'order/order.service';
+import { ReservationType } from 'reservation/api/reservation.type';
+import { ReservationService } from 'reservation/reservation.service';
 import { Roles } from 'auth/roles.enum';
 import { RolesGuard } from 'auth/guards/roles.guard';
 import { Role } from 'constants/roles.decorator';
@@ -17,7 +17,7 @@ export class RestaurantResolver {
   constructor(
     private restaurantService: RestaurantService,
     private userService: UserService,
-    private orderService: OrderService,
+    private reservationService: ReservationService,
   ) {}
 
   @Query(() => [RestaurantType])
@@ -37,8 +37,8 @@ export class RestaurantResolver {
 
   @Role(Roles.SUPERADMIN)
   @UseGuards(OrGuard([RolesGuard, RestaurantOwnerGuard]))
-  @ResolveField('orders', () => [OrderType])
-  restaurantOrders(@Parent() restaurant: RestaurantType) {
-    return this.orderService.findRestaurantOrders(restaurant.id);
+  @ResolveField('reservations', () => [ReservationType])
+  restaurantReservations(@Parent() restaurant: RestaurantType) {
+    return this.reservationService.findRestaurantReservations(restaurant.id);
   }
 }

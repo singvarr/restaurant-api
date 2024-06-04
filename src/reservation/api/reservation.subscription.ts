@@ -1,24 +1,24 @@
 import { Args, ID, Resolver, Subscription } from '@nestjs/graphql';
-import { OrderType } from 'order/api/order.type';
 import { Inject, NotFoundException } from '@nestjs/common';
 import { PubSub } from 'graphql-subscriptions';
 import { PUB_SUB } from 'constants/pubsub-inject-token';
-import { OrderEvents } from './order-event.enum';
+import { ReservationType } from 'reservation/api/reservation.type';
+import { ReservationEvents } from 'reservation/api/reservation-event';
 import { RestaurantService } from 'restaurant/restaurant.service';
 
-@Resolver(() => OrderType)
-export class OrderSubscriptions {
+@Resolver(() => ReservationType)
+export class ReservationSubscriptions {
   constructor(
     private restaurantService: RestaurantService,
     @Inject(PUB_SUB) private pubSub: PubSub,
   ) {}
 
-  @Subscription(() => OrderType, {
+  @Subscription(() => ReservationType, {
     filter: (payload, { restaurantId }) =>
       !restaurantId ||
-      payload.addedOrder.restaurant.id === Number(restaurantId),
+      payload.addedReservation.restaurant.id === Number(restaurantId),
   })
-  async addedOrder(
+  async addedReservation(
     @Args('restaurantId', { type: () => ID, nullable: true })
     restaurantId: number | null = null,
   ) {
@@ -30,13 +30,13 @@ export class OrderSubscriptions {
       }
     }
 
-    return this.pubSub.asyncIterator(OrderEvents.ORDER_CREATED);
+    return this.pubSub.asyncIterator(ReservationEvents.RESERVATION_CREATED);
   }
 
-  @Subscription(() => OrderType, {
+  @Subscription(() => ReservationType, {
     filter: ({ user }, _, { req }) => user.id === req.user.id,
   })
-  async reviewedOrder() {
-    return this.pubSub.asyncIterator(OrderEvents.ORDER_REVIEWED);
+  async reviewedReservation() {
+    return this.pubSub.asyncIterator(ReservationEvents.RESERVATION_REVIEWED);
   }
 }
