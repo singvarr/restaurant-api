@@ -2,9 +2,9 @@ import { Resolver, Query, Args } from '@nestjs/graphql';
 import { PaginatedReviews, ReviewType } from './review.type';
 import { ReviewService } from 'review/review.service';
 import { Public } from 'constants/is-public.decorator';
-import { PaginationInput } from 'pagination/api/pagination.input';
 import { RestaurantService } from 'restaurant/restaurant.service';
 import { NotFoundException } from '@nestjs/common';
+import { ReviewPaginationInput } from './review-pagination.input';
 
 @Resolver(() => ReviewType)
 export class ReviewResolver {
@@ -17,7 +17,7 @@ export class ReviewResolver {
   @Query(() => PaginatedReviews)
   async findAllRestaurantReviews(
     @Args('restaurantName') restaurantName: string,
-    @Args('paginationInput') input: PaginationInput,
+    @Args('input') input: ReviewPaginationInput,
   ) {
     const restaurant = await this.restaurantService.findByName(restaurantName);
 

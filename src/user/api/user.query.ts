@@ -5,7 +5,8 @@ import { RestaurantService } from 'restaurant/restaurant.service';
 import { RestaurantType } from 'restaurant/api/restaurant.type';
 import { ReservationType } from 'reservation/api/reservation.type';
 import { ReservationService } from 'reservation/reservation.service';
-import { PaginationInput } from 'pagination/api/pagination.input';
+import { Public } from 'constants/is-public.decorator';
+import { UserPaginationInput } from './user-pagination.input';
 
 @Resolver(() => UserType)
 export class UserQuery {
@@ -15,8 +16,9 @@ export class UserQuery {
     private reservationService: ReservationService,
   ) {}
 
+  @Public()
   @Query(() => PaginatedUsers)
-  findAllUsers(@Args('paginationInput') input: PaginationInput) {
+  findAllUsers(@Args('input') input: UserPaginationInput) {
     return this.userService.findAllUsers(input);
   }
 
