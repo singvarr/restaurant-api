@@ -26,8 +26,6 @@ export class UserService {
     const query = this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.reservations', 'reservations')
-      .groupBy('user.id')
-      .addGroupBy('reservations.id');
 
     return this.paginationService.paginate(query, input, 'user.id');
   }
