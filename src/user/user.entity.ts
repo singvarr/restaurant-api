@@ -4,7 +4,6 @@ import { Restaurant } from 'restaurant/restaurant.entity';
 import { Reservation } from 'reservation/reservation.entity';
 import { Roles } from 'auth/roles.enum';
 import { Review } from 'review/review.entity';
-import { VirtualColumn } from 'common/virtual-column.decorator';
 
 @Entity()
 export class User {
