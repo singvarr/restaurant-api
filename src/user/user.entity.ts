@@ -36,7 +36,4 @@ export class User {
 
   @OneToMany(() => Review, (review) => review.author)
   reviews: Review[];
-
-  // @VirtualColumn()
-  // reservationCount: number;
 }
