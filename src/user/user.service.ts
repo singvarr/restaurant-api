@@ -23,10 +23,13 @@ export class UserService {
   }
 
   async findAllUsers(input: PaginationInput): Promise<PaginatedUsers> {
-    const { cursor, direction, limit } = input;
-    const query = this.userRepository.createQueryBuilder().select();
+    const query = this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.reservations', 'reservations')
+      .groupBy('user.id')
+      .addGroupBy('reservations.id');
 
-    return this.paginationService.paginate(query, cursor, direction, limit);
+    return this.paginationService.paginate(query, input, 'user.id');
   }
 
   findUserById(id: number) {

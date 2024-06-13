@@ -14,6 +14,9 @@ export class UserType {
 
   @Field(() => String)
   email: string;
+
+  @Field(() => Int)
+  reservationCount: number;
 }
 
 @ObjectType()

@@ -21,6 +21,9 @@ export class ReviewType {
 
   @Field(() => RestaurantType)
   restaurant: RestaurantType;
+
+  @Field(() => String)
+  createdAt: string;
 }
 
 @ObjectType()
