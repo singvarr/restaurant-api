@@ -4,6 +4,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import GraphQLJSON from 'graphql-type-json';
 import { dbConfig } from 'config/db';
 import { RestaurantModule } from 'restaurant/restaurant.module';
 import { AuthModule } from 'auth/auth.module';
@@ -13,6 +14,7 @@ import { TokenModule } from 'token/token.module';
 import { ConfigModule } from 'config/config.module';
 import { ReviewModule } from 'review/review.module';
 import { PaginationModule } from 'pagination/pagination.module';
+import { MenuModule } from './menu/menu.module';
 
 @Module({
   imports: [
@@ -20,6 +22,7 @@ import { PaginationModule } from 'pagination/pagination.module';
     TypeOrmModule.forRoot(dbConfig),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
+      resolvers: { JSON: GraphQLJSON },
       autoSchemaFile: join(process.cwd(), 'schema.gql'),
       playground: false,
       installSubscriptionHandlers: true,
@@ -38,6 +41,7 @@ import { PaginationModule } from 'pagination/pagination.module';
     TokenModule,
     PaginationModule,
     ReviewModule,
+    MenuModule,
   ],
 })
 export class AppModule {}

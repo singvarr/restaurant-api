@@ -11,6 +11,9 @@ import { ReservationService } from 'reservation/reservation.service';
 import { Roles } from 'auth/roles.enum';
 import { RolesGuard } from 'auth/guards/roles.guard';
 import { Role } from 'constants/roles.decorator';
+import { Public } from 'constants/is-public.decorator';
+import { MenuType } from 'menu/api/menu.type';
+import { MenuService } from 'menu/menu.service';
 
 @Resolver(() => RestaurantType)
 export class RestaurantResolver {
@@ -18,6 +21,7 @@ export class RestaurantResolver {
     private restaurantService: RestaurantService,
     private userService: UserService,
     private reservationService: ReservationService,
+    private menuService: MenuService,
   ) {}
 
   @Query(() => [RestaurantType])
@@ -25,6 +29,7 @@ export class RestaurantResolver {
     return this.restaurantService.findAll();
   }
 
+  @Public()
   @Query(() => RestaurantType, { nullable: true })
   findRestaurantByName(@Args('name', { type: () => String }) name: string) {
     return this.restaurantService.findByName(name);
@@ -40,5 +45,10 @@ export class RestaurantResolver {
   @ResolveField('reservations', () => [ReservationType])
   restaurantReservations(@Parent() restaurant: RestaurantType) {
     return this.reservationService.findRestaurantReservations(restaurant.id);
+  }
+
+  @ResolveField('menu', () => MenuType, { nullable: true })
+  menu(@Parent() restaurant: RestaurantType) {
+    return this.menuService.findRestaurantMenu(restaurant.id);
   }
 }

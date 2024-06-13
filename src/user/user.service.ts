@@ -25,9 +25,7 @@ export class UserService {
   async findAllUsers(input: PaginationInput): Promise<PaginatedUsers> {
     const query = this.userRepository
       .createQueryBuilder('user')
-      .leftJoinAndSelect('user.reservations', 'reservations')
-      .groupBy('user.id')
-      .addGroupBy('reservations.id');
+      .leftJoinAndSelect('user.reservations', 'reservations');
 
     return this.paginationService.paginate(query, input, 'user.id');
   }
