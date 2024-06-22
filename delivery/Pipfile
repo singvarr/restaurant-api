@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+graphene = ">=3.0"
+psycopg = "*"
+graphene-django = "*"
+graphene-django-extras = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"
