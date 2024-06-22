@@ -38,3 +38,5 @@ lerna-debug.log*
 pg_data
 schema.gql
 .vscode
+
+*.pyc
