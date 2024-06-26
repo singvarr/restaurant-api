@@ -9,6 +9,7 @@ graphene = ">=3.0"
 psycopg = "*"
 graphene-django = "*"
 graphene-django-extras = "*"
+graphene-federation = "*"
 
 [dev-packages]
 
