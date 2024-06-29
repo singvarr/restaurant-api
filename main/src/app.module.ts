@@ -5,7 +5,6 @@ import {
   ApolloFederationDriverConfig,
 } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import GraphQLJSON from 'graphql-type-json';
 
 import { dbConfig } from 'config/db';
