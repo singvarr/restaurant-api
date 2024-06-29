@@ -16,7 +16,7 @@ import { ReservationSubscriptions } from './api/reservation.subscription';
   providers: [
     ReservationMutations,
     ReservationService,
-    ReservationSubscriptions,
+    // ReservationSubscriptions,
   ],
   exports: [ReservationService],
 })
