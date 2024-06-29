@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  restaurant-delivery-db:
+    image: postgres:16
+    ports:
+      - 5436:5432
+    environment:
+      POSTGRES_DB: restaurant-delivery
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: Qwerty123!
+    container_name: restaurant-delivery-db
+    volumes:
+      - ./restaurant-delivery-db:/var/lib/postgresql/restaurant-delivery-db
+
+  restaurant-main-db:
+    image: postgres:16
+    ports:
+      - 5435:5432
+    environment:
+      POSTGRES_DB: restaurant-main
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: Qwerty123!
+    container_name: restaurant-main-db
+    volumes:
+      - ./restaurant-main-db:/var/lib/postgresql/restaurant-main-db
+
+volumes:
+  restaurant-main-db:
+  restaurant-delivery-db:
