@@ -3,7 +3,6 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { IntrospectAndCompose } from '@apollo/gateway';
 import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
-import { SUBGRAPHS } from './config/subgraphs';
 
 @Module({
   imports: [
@@ -13,10 +12,14 @@ import { SUBGRAPHS } from './config/subgraphs';
         playground: false,
         plugins: [ApolloServerPluginLandingPageLocalDefault()],
       },
+
       driver: ApolloGatewayDriver,
       gateway: {
         supergraphSdl: new IntrospectAndCompose({
-          subgraphs: SUBGRAPHS,
+          subgraphs: [
+            { name: 'main', url: process.env.MAIN_API_URL },
+            { name: 'delivery', url: process.env.DELIVERY_API_URL },
+          ],
         }),
       },
     }),
