@@ -1,4 +1,5 @@
-from graphene import ObjectType, String, Schema
+from graphene import ObjectType, String
+from graphene_federation import LATEST_VERSION, build_schema
 
 
 class Query(ObjectType):
@@ -12,4 +13,4 @@ class Query(ObjectType):
         return "See ya!"
 
 
-schema = Schema(query=Query)
+schema = build_schema(query=Query, federation_version=LATEST_VERSION)

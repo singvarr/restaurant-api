@@ -5,6 +5,7 @@ import { PUB_SUB } from 'constants/pubsub-inject-token';
 import { ReservationType } from 'reservation/api/reservation.type';
 import { ReservationEvents } from 'reservation/api/reservation-event';
 import { RestaurantService } from 'restaurant/restaurant.service';
+import { Public } from 'constants/is-public.decorator';
 
 @Resolver(() => ReservationType)
 export class ReservationSubscriptions {
@@ -13,6 +14,7 @@ export class ReservationSubscriptions {
     @Inject(PUB_SUB) private pubSub: PubSub,
   ) {}
 
+  @Public()
   @Subscription(() => ReservationType, {
     filter: (payload, { restaurantId }) =>
       !restaurantId ||

@@ -1,10 +1,12 @@
-import { join } from 'path';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import {
+  ApolloFederationDriver,
+  ApolloFederationDriverConfig,
+} from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import GraphQLJSON from 'graphql-type-json';
+
 import { dbConfig } from 'config/db';
 import { RestaurantModule } from 'restaurant/restaurant.module';
 import { AuthModule } from 'auth/auth.module';
@@ -20,19 +22,23 @@ import { MenuModule } from './menu/menu.module';
   imports: [
     ConfigModule,
     TypeOrmModule.forRoot(dbConfig),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
+    GraphQLModule.forRoot<ApolloFederationDriverConfig>({
+      driver: ApolloFederationDriver,
       resolvers: { JSON: GraphQLJSON },
-      autoSchemaFile: join(process.cwd(), 'schema.gql'),
-      playground: false,
-      installSubscriptionHandlers: true,
+      autoSchemaFile: true,
       fieldResolverEnhancers: ['guards'],
-      subscriptions: {
-        'graphql-ws': true,
-        // Important: graphql-ws isn't supported by default GraphQL playground
-        'subscriptions-transport-ws': process.env.NODE_ENV === 'development',
-      },
-      plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      // Important: subscription handlers aren't supported in nest-apollo subgraph driver yet:
+      // https://github.com/nestjs/graphql/issues/2879
+      installSubscriptionHandlers: false,
+      // subscriptions: {
+      //   'graphql-ws': true,
+      //   // Important: graphql-ws isn't supported by default GraphQL playground
+      //   'subscriptions-transport-ws': process.env.NODE_ENV === 'development',
+      // },
+      playground: false,
+      // Important: introspection fails due to bug with handling of enum values:
+      // https://github.com/nestjs/graphql/issues/1337
+      // plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
     RestaurantModule,
     UserModule,
