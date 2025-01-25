@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository, SelectQueryBuilder } from 'typeorm';
 import { Restaurant } from 'restaurant/restaurant.entity';
 import { User } from 'user/user.entity';
 import { PaginationService } from 'pagination/pagination.service';
@@ -8,6 +8,8 @@ import { Review } from './review.entity';
 import { CreateReviewInput } from './api/create-review.input';
 import { PaginatedReviews } from './api/review.type';
 import { ReviewPaginationInput } from './api/review-pagination.input';
+import { TokenPayload } from 'token/token-payload.interface';
+import { EditReviewInput } from './api/edit-review.input';
 
 @Injectable()
 export class ReviewService {
@@ -44,5 +46,28 @@ export class ReviewService {
       .leftJoinAndSelect('review.restaurant', 'restaurant');
 
     return this.paginationService.paginate(query, input, 'review.id');
+  }
+
+  async findById(id: number, options: FindOneOptions<Review> = {}) {
+    return this.reviewRepository.findOne({ where: { id }, ...options });
+  }
+
+  async deleteReview(id: number) {
+    const { affected } = await this.reviewRepository.delete(id);
+
+    return { affected };
+  }
+
+  async editReview(review: Review, data: EditReviewInput) {
+    await this.reviewRepository.update(review.id, data);
+
+    return this.findById(review.id, { relations: ['author', 'restaurant'] });
+  }
+
+  isOwner(review: Review, tokenPayload: TokenPayload): Promise<boolean> {
+    return this.reviewRepository.existsBy({
+      id: review.id,
+      author: { id: tokenPayload.id },
+    });
   }
 }

@@ -1,15 +1,23 @@
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, ID, Mutation, Resolver } from '@nestjs/graphql';
 import { Request } from 'express';
-import { ReviewType } from './review.type';
-import { ReviewService } from 'review/review.service';
-import { CreateReviewInput } from './create-review.input';
-import { RestaurantService } from 'restaurant/restaurant.service';
 import {
   InternalServerErrorException,
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
+import { OrGuard } from '@nest-lab/or-guard';
+import { Roles } from 'auth/roles.enum';
+import { Role } from 'constants/roles.decorator';
+import { ReviewOwnerGuard } from 'review/review-owner.guard';
+import { EditReviewInput } from './edit-review.input';
+import { RolesGuard } from 'auth/guards/roles.guard';
+import { ReviewType } from './review.type';
+import { ReviewService } from 'review/review.service';
+import { CreateReviewInput } from './create-review.input';
+import { RestaurantService } from 'restaurant/restaurant.service';
 import { errorCodes } from 'constants/error-codes';
+import { DeleteResult } from 'common/delete-result';
 
 @Resolver(() => ReviewType)
 export class ReviewMutations {
@@ -47,5 +55,28 @@ export class ReviewMutations {
 
       throw new InternalServerErrorException();
     }
+  }
+
+  @Role(Roles.SUPERADMIN)
+  @UseGuards(OrGuard([RolesGuard, ReviewOwnerGuard]))
+  @Mutation(() => ReviewType)
+  async editReview(
+    @Args('reviewId', { type: () => ID }) reviewId: number,
+    @Args('body', { type: () => EditReviewInput }) body: EditReviewInput,
+  ) {
+    const review = await this.reviewService.findById(reviewId);
+
+    if (!review) {
+      throw new NotFoundException(`Review ${reviewId} isn't found`);
+    }
+
+    return this.reviewService.editReview(review, body);
+  }
+
+  @Role(Roles.SUPERADMIN)
+  @UseGuards(OrGuard([RolesGuard, ReviewOwnerGuard]))
+  @Mutation(() => DeleteResult)
+  async deleteReview(@Args('id', { type: () => ID }) id: number) {
+    return this.reviewService.deleteReview(id);
   }
 }
