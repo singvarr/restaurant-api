@@ -2,7 +2,7 @@ import { Field, InputType, ID } from '@nestjs/graphql';
 import { IsDate, MinDate } from 'class-validator';
 
 @InputType()
-export class CreateOrderInput {
+export class CreateReservationInput {
   @Field(() => ID)
   userId: number;
 
@@ -12,5 +12,5 @@ export class CreateOrderInput {
   @Field()
   @IsDate()
   @MinDate(() => new Date())
-  orderDate: Date;
+  reservationDate: Date;
 }

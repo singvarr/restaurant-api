@@ -1,8 +1,9 @@
 import { IsEmail, IsStrongPassword } from 'class-validator';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Restaurant } from 'restaurant/restaurant.entity';
-import { Order } from 'order/order.entity';
+import { Reservation } from 'reservation/reservation.entity';
 import { Roles } from 'auth/roles.enum';
+import { Review } from 'review/review.entity';
 
 @Entity()
 export class User {
@@ -29,6 +30,9 @@ export class User {
   @OneToMany(() => Restaurant, (restaurant) => restaurant.owner)
   restaurants: Restaurant[];
 
-  @OneToMany(() => Order, (order) => order.user)
-  orders: Order[];
+  @OneToMany(() => Reservation, (reservation) => reservation.user)
+  reservations: Reservation[];
+
+  @OneToMany(() => Review, (review) => review.author)
+  reviews: Review[];
 }

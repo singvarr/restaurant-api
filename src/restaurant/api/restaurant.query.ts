@@ -6,18 +6,22 @@ import { RestaurantService } from '../restaurant.service';
 import { RestaurantOwnerGuard } from '../restaurant-owner.guard';
 import { UserType } from 'user/api/user.type';
 import { UserService } from 'user/user.service';
-import { OrderType } from 'order/api/order.type';
-import { OrderService } from 'order/order.service';
+import { ReservationType } from 'reservation/api/reservation.type';
+import { ReservationService } from 'reservation/reservation.service';
 import { Roles } from 'auth/roles.enum';
 import { RolesGuard } from 'auth/guards/roles.guard';
 import { Role } from 'constants/roles.decorator';
+import { Public } from 'constants/is-public.decorator';
+import { MenuType } from 'menu/api/menu.type';
+import { MenuService } from 'menu/menu.service';
 
 @Resolver(() => RestaurantType)
 export class RestaurantResolver {
   constructor(
     private restaurantService: RestaurantService,
     private userService: UserService,
-    private orderService: OrderService,
+    private reservationService: ReservationService,
+    private menuService: MenuService,
   ) {}
 
   @Query(() => [RestaurantType])
@@ -25,6 +29,7 @@ export class RestaurantResolver {
     return this.restaurantService.findAll();
   }
 
+  @Public()
   @Query(() => RestaurantType, { nullable: true })
   findRestaurantByName(@Args('name', { type: () => String }) name: string) {
     return this.restaurantService.findByName(name);
@@ -37,8 +42,13 @@ export class RestaurantResolver {
 
   @Role(Roles.SUPERADMIN)
   @UseGuards(OrGuard([RolesGuard, RestaurantOwnerGuard]))
-  @ResolveField('orders', () => [OrderType])
-  restaurantOrders(@Parent() restaurant: RestaurantType) {
-    return this.orderService.findRestaurantOrders(restaurant.id);
+  @ResolveField('reservations', () => [ReservationType])
+  restaurantReservations(@Parent() restaurant: RestaurantType) {
+    return this.reservationService.findRestaurantReservations(restaurant.id);
+  }
+
+  @ResolveField('menu', () => MenuType, { nullable: true })
+  menu(@Parent() restaurant: RestaurantType) {
+    return this.menuService.findRestaurantMenu(restaurant.id);
   }
 }

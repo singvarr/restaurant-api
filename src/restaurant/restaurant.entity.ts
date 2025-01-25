@@ -4,18 +4,21 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from 'user/user.entity';
 import { CuisineType } from './cuisine-type.enum';
-import { Order } from 'order/order.entity';
+import { Reservation } from 'reservation/reservation.entity';
+import { Review } from 'review/review.entity';
+import { Menu } from 'menu/menu.entity';
 
 @Entity()
 export class Restaurant {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @Column()
@@ -25,6 +28,13 @@ export class Restaurant {
   @JoinColumn()
   owner: User;
 
-  @OneToMany(() => Order, (order) => order.restaurant)
-  orders: Order[];
+  @OneToMany(() => Reservation, (reservation) => reservation.restaurant)
+  reservations: Reservation[];
+
+  @OneToMany(() => Review, (review) => review.restaurant)
+  reviews: Review[];
+
+  @OneToOne(() => Menu, (menu) => menu.restaurant)
+  @JoinColumn()
+  menu: Menu;
 }

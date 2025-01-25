@@ -3,20 +3,22 @@ import { PaginatedUsers, UserType } from './user.type';
 import { UserService } from '../user.service';
 import { RestaurantService } from 'restaurant/restaurant.service';
 import { RestaurantType } from 'restaurant/api/restaurant.type';
-import { OrderType } from 'order/api/order.type';
-import { OrderService } from 'order/order.service';
-import { PaginationInput } from 'pagination/api/pagination.input';
+import { ReservationType } from 'reservation/api/reservation.type';
+import { ReservationService } from 'reservation/reservation.service';
+import { Public } from 'constants/is-public.decorator';
+import { UserPaginationInput } from './user-pagination.input';
 
 @Resolver(() => UserType)
 export class UserQuery {
   constructor(
     private userService: UserService,
     private restaurantService: RestaurantService,
-    private orderService: OrderService,
+    private reservationService: ReservationService,
   ) {}
 
+  @Public()
   @Query(() => PaginatedUsers)
-  findAllUsers(@Args('paginationInput') input: PaginationInput) {
+  findAllUsers(@Args('input') input: UserPaginationInput) {
     return this.userService.findAllUsers(input);
   }
 
@@ -25,8 +27,8 @@ export class UserQuery {
     return this.restaurantService.findUserRestaurants(user.id);
   }
 
-  @ResolveField('orders', () => [OrderType])
-  orders(@Parent() user: UserType) {
-    return this.orderService.findUserOrders(user.id);
+  @ResolveField('reservations', () => [ReservationType])
+  reservations(@Parent() user: UserType) {
+    return this.reservationService.findUserReservations(user.id);
   }
 }
