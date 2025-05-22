@@ -4,12 +4,14 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 import { Request } from 'express';
 import { IS_PUBLIC_KEY } from 'constants/is-public.decorator';
 import { AccessTokenService } from 'token/access-token.service';
+import { UserService } from 'user/user.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private accessTokenService: AccessTokenService,
     private reflector: Reflector,
+    private userService: UserService,
   ) {}
 
   getTokenFromHTTPHeader(request: Request) {
@@ -42,8 +44,8 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const userPayload = await this.accessTokenService.verify(token);
-      request.user = userPayload;
+      const { id } = await this.accessTokenService.verify(token);
+      request.user = await this.userService.findUserById(id);
 
       return true;
     } catch (_) {
